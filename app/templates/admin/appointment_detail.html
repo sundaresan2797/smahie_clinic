@@ -1,0 +1,69 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ appt.reference }}{% endblock %}
+{% block content %}
+<p><a class="admin-back" href="/admin/appointments">← All requests</a></p>
+<div class="admin-head">
+  <div>
+    <h1 class="admin-title">{{ appt.full_name }} <span class="status-pill status-{{ appt.status }}">{{ appt.status | capitalize }}</span></h1>
+    <p class="admin-sub">Reference {{ appt.reference }} · received {{ appt.created_at | ist_datetime }}</p>
+  </div>
+  <a class="admin-btn" href="tel:{{ appt.phone }}">Call {{ appt.phone | phone }}</a>
+</div>
+
+{% if updated %}<div class="form-alert form-alert--success" role="status"><span>{{ 'Status updated.' if updated == 'status' else 'Notes saved.' }}</span></div>{% endif %}
+
+<div class="admin-grid">
+  <section class="admin-card" aria-labelledby="req-title">
+    <h2 class="admin-card__title" id="req-title">Request</h2>
+    <dl class="admin-dl">
+      <div><dt>Mobile</dt><dd><a href="tel:{{ appt.phone }}">{{ appt.phone | phone }}</a></dd></div>
+      <div><dt>Email</dt><dd>{% if appt.email %}<a href="mailto:{{ appt.email }}">{{ appt.email }}</a>{% else %}—{% endif %}</dd></div>
+      <div><dt>Preferred date</dt><dd>{{ appt.preferred_date | nice_date }}</dd></div>
+      <div><dt>Session</dt><dd>{{ session.label if session else appt.preferred_session }}{% if session %} ({{ session.display }}){% endif %}</dd></div>
+      <div><dt>Preferred time</dt><dd>{{ appt.preferred_time | nice_time if appt.preferred_time else 'No preference' }}</dd></div>
+      <div><dt>Consent given</dt><dd>{{ appt.consent_at | ist_datetime }}</dd></div>
+    </dl>
+    <h3 class="admin-card__sub">Message from patient</h3>
+    <p class="admin-message">{{ appt.message or 'No message.' }}</p>
+  </section>
+
+  <div class="admin-stack">
+    <section class="admin-card" aria-labelledby="status-title">
+      <h2 class="admin-card__title" id="status-title">Update status</h2>
+      {% if appt.allowed_transitions %}
+      <p class="admin-hint">Confirm only after speaking to the patient.</p>
+      <div class="admin-actions">
+        {% for s in appt.allowed_transitions %}
+        <form method="post" action="/admin/appointments/{{ appt.id }}/status">
+          <input type="hidden" name="csrf_token" value="{{ csrf }}">
+          <input type="hidden" name="status" value="{{ s }}">
+          <button class="admin-btn admin-btn--{{ s }}" type="submit">Mark {{ s }}</button>
+        </form>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="admin-hint">This request is {{ appt.status }}. No further changes are available.</p>
+      {% endif %}
+    </section>
+
+    <section class="admin-card" aria-labelledby="notes-title">
+      <h2 class="admin-card__title" id="notes-title">Internal notes</h2>
+      <form method="post" action="/admin/appointments/{{ appt.id }}/notes" class="admin-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf }}">
+        <label class="visually-hidden" for="notes">Internal notes</label>
+        <textarea class="input" id="notes" name="notes" rows="5" maxlength="2000" placeholder="Visible to clinic staff only">{{ appt.admin_notes or '' }}</textarea>
+        <button class="admin-btn" type="submit">Save notes</button>
+      </form>
+    </section>
+
+    <section class="admin-card" aria-labelledby="history-title">
+      <h2 class="admin-card__title" id="history-title">History</h2>
+      {% if history %}
+      <ul class="admin-history">
+        {% for h in history %}<li><strong>{{ h.action | capitalize }}</strong> {{ h.detail or '' }}<br><small>{{ h.created_at | ist_datetime }} · {{ h.user.email if h.user else 'deleted user' }}</small></li>{% endfor %}
+      </ul>
+      {% else %}<p class="admin-hint">No changes yet.</p>{% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

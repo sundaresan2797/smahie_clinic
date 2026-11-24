@@ -1,0 +1,7 @@
+{% import "components/macros.html" as ui with context %}
+{% if page not in ('appointment',) %}
+<div class="mobile-cta" data-mobile-cta>
+  <a class="mobile-cta__btn mobile-cta__btn--call" href="{{ clinic.tel_href }}">{{ ui.icon('phone', size=18) }} Call</a>
+  <a class="mobile-cta__btn mobile-cta__btn--book" href="/appointment">{{ ui.icon('calendar', size=18) }} Book Appointment</a>
+</div>
+{% endif %}

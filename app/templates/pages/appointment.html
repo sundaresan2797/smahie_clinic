@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as ui with context %}
+{% block content %}
+{% set title %}Request an <em>Appointment</em>{% endset %}
+{{ ui.page_hero("Appointments", title, "Tell us when you would like to visit. The clinic team will call you to confirm availability — submitting this form does not confirm a booking.", meta.breadcrumbs, "page-hero--compact") }}
+
+<section class="section section--ivory section--tight-top" aria-label="Appointment request form">
+  <div class="container-xl appointment-layout">
+    <div class="appointment-layout__form">
+      {% include "components/appointment_form.html" %}
+    </div>
+    <aside class="appointment-layout__aside">
+      <div class="sticky-stack">
+        <div class="aside-card">
+          <h2 class="aside-card__title">How it works</h2>
+          <ol class="mini-steps mini-steps--compact">
+            <li><span class="mini-steps__num">1</span><p><strong>Send your request</strong> with a preferred date and session.</p></li>
+            <li><span class="mini-steps__num">2</span><p><strong>We call you</strong> to confirm a suitable time.</p></li>
+            <li><span class="mini-steps__num">3</span><p><strong>Visit the clinic</strong> for your consultation.</p></li>
+          </ol>
+        </div>
+        <div class="aside-card aside-card--navy">
+          <h2 class="aside-card__title">Prefer to call?</h2>
+          <a class="aside-card__phone" href="{{ clinic.tel_href }}">{{ clinic.phone_display }}</a>
+          <dl class="hours-list hours-list--light">{% for s in clinic.sessions %}<div><dt>{{ s.label }}</dt><dd>{{ s.display }}</dd></div>{% endfor %}</dl>
+          <p class="aside-card__small">{{ ui.icon('pin', size=16) }} {{ clinic.locality }}, {{ clinic.area }}, {{ clinic.city }}</p>
+        </div>
+        <div class="safety-note safety-note--compact">
+          {{ ui.icon('alert', size=20) }}
+          <p><strong>Not for emergencies.</strong> For a serious injury or emergency, call <a href="tel:112">112</a> or <a href="tel:108">108</a>.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

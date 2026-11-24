@@ -1,0 +1,70 @@
+{% import "components/macros.html" as ui with context %}
+<footer class="site-footer">
+  <div class="site-footer__glow" aria-hidden="true"></div>
+  <div class="container-xl">
+    <div class="footer-cta">
+      <p class="footer-cta__text">Questions about your bones, joints or spine? <span>We're a phone call away.</span></p>
+      <div class="footer-cta__actions">
+        <a class="btn-soc btn-soc--gold" href="/appointment">Request Appointment <span class="btn-soc__icon">{{ ui.icon('arrow-right', size=16) }}</span></a>
+        <a class="btn-soc btn-soc--light" href="{{ clinic.tel_href }}">{{ ui.icon('phone', size=18) }} {{ clinic.phone_display }}</a>
+      </div>
+    </div>
+
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand brand--light" href="/">
+          {{ ui.emblem(56, "brand__mark brand__mark--badge") }}
+          <span class="brand__text"><span class="brand__name">SMAHIE</span><span class="brand__sub">Ortho Care</span></span>
+        </a>
+        <p class="footer-brand__tagline">{{ clinic.tagline }}</p>
+        <p class="footer-brand__pillars">{{ clinic.pillars | join(' · ') }}</p>
+        <p class="footer-brand__doctor">{{ doctor.name }}<br><span>{{ doctor.qualifications }} · {{ doctor.title }}</span></p>
+      </div>
+
+      <nav class="footer-col" aria-labelledby="footer-quick">
+        <h2 class="footer-heading" id="footer-quick">Quick links</h2>
+        <ul class="footer-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About the Clinic</a></li>
+          <li><a href="/doctor">Meet the Doctor</a></li>
+          <li><a href="/gallery">Gallery</a></li>
+          <li><a href="/faq">Patient Information</a></li>
+          <li><a href="/appointment">Request Appointment</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="footer-col" aria-labelledby="footer-services">
+        <h2 class="footer-heading" id="footer-services">Services</h2>
+        <ul class="footer-links">
+          {% for s in all_services %}<li><a href="{{ s.path }}">{{ s.title }}</a></li>{% endfor %}
+        </ul>
+      </nav>
+
+      <div class="footer-col">
+        <h2 class="footer-heading">Contact</h2>
+        <ul class="footer-contact">
+          <li>{{ ui.icon('phone', size=18) }}<a href="{{ clinic.tel_href }}">{{ clinic.phone_display }}</a></li>
+          <li>{{ ui.icon('pin', size=18) }}<span>{{ clinic.locality }}, {{ clinic.area }},<br>{{ clinic.city }}, {{ clinic.state }}</span></li>
+          {% if clinic.email %}<li>{{ ui.icon('mail', size=18) }}<a href="mailto:{{ clinic.email }}">{{ clinic.email }}</a></li>{% endif %}
+        </ul>
+        <h2 class="footer-heading footer-heading--sub">Consultation hours</h2>
+        <dl class="footer-hours">
+          {% for s in clinic.sessions %}<div><dt>{{ s.label }}</dt><dd>{{ s.display }}</dd></div>{% endfor %}
+        </dl>
+      </div>
+    </div>
+
+    <p class="footer-emergency">{{ ui.icon('alert', size=16) }}<span>This website is not for emergencies. In a medical emergency, call <a href="tel:112">112</a> or <a href="tel:108">108</a>.</span></p>
+
+    <div class="footer-bottom">
+      <p>© {{ current_year }} {{ clinic.name }}. All rights reserved.</p>
+      <ul class="footer-legal">
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/terms">Terms and Conditions</a></li>
+        <li><a href="/sitemap.xml">Sitemap</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-word" aria-hidden="true">Care That Keeps You Moving.</p>
+</footer>

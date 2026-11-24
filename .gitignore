@@ -1,0 +1,40 @@
+# Environments and secrets
+venv/
+.venv/
+.env
+.env.*
+!.env.example
+
+# Local data — never commit patient data
+data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node (vendor files are copied into app/static/vendor and committed)
+node_modules/
+
+# Test artefacts
+test-results/
+playwright-report/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Lighthouse reports
+*.report.html
+*.report.json
+lighthouse-reports/
+.vercel
+.env*

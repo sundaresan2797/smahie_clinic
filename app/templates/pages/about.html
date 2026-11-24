@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as ui with context %}
+{% block content %}
+{% set title %}Orthopaedic Care in <em>Perungudi</em>{% endset %}
+{{ ui.page_hero("About the clinic", title, clinic.name ~ " is an orthopaedic clinic in " ~ clinic.locality ~ ", " ~ clinic.area ~ ", where " ~ doctor.name ~ ", " ~ doctor.title ~ ", sees patients for bone, joint, spine and movement concerns.", meta.breadcrumbs) }}
+
+<section class="section section--white" aria-labelledby="who-title">
+  <div class="container-xl split">
+    <div class="split__main">
+      <p class="eyebrow" data-anim="fade">Who we are</p>
+      <h2 class="section-title" id="who-title" data-anim="lines">Care That Keeps <em>You Moving.</em></h2>
+      <span class="gold-rule" data-anim="rule" aria-hidden="true"></span>
+      <div class="prose" data-anim="up">
+        <p>Pain or stiffness in a joint, the back or after an injury can quietly change the way you live — how far you walk, how well you sleep, and how easily you manage everyday tasks.</p>
+        <p>{{ clinic.name }} is a place to talk about those concerns with an orthopaedic specialist, have them examined, and leave with a clearer understanding of what may be happening and what you can do next.</p>
+        <p>Consultations are with {{ doctor.name }} ({{ doctor.qualifications }}), {{ doctor.title }}.</p>
+      </div>
+    </div>
+    <ul class="pillar-cards" data-anim="stagger">
+      {% set pillar_text = {
+        "Bone": "Bone injuries and fractures, and concerns about bone health.",
+        "Spine": "Back and neck pain that affects sitting, standing and work.",
+        "Joint": "Shoulder, hip, knee and ankle pain, stiffness or swelling.",
+        "Movement": "Helping you understand what is limiting the way you move."
+      } %}
+      {% for p in clinic.pillars %}
+      <li class="pillar-card" data-anim-child>
+        <span class="pillar-card__num">0{{ loop.index }}</span>
+        <h3 class="pillar-card__title">{{ p }}</h3>
+        <p>{{ pillar_text[p] }}</p>
+      </li>
+      {% endfor %}
+      <li class="pillar-cards__note">{{ ui.review("Focus areas awaiting clinic review") }}</li>
+    </ul>
+  </div>
+</section>
+
+<section class="values values--compact" aria-labelledby="values-title">
+  <div class="container-xl">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow" data-anim="fade">Our approach</p>
+        <h2 class="section-title" id="values-title" data-anim="lines">What You Can <em>Expect</em></h2>
+      </div>
+    </div>
+    <ul class="value-cards value-cards--four" data-anim="stagger">
+      {% for v in values_list %}
+      <li class="value-card" data-anim-child>
+        <span class="value-card__num">0{{ loop.index }}</span>
+        <span class="value-card__icon">{{ ui.icon('v-' ~ v.icon, size=26) }}</span>
+        <h3 class="value-card__title">{{ v.title }}</h3>
+        <p class="value-card__text">{{ v.text }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section section--white" aria-labelledby="visit-title">
+  <div class="container-xl">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow" data-anim="fade">Your visit</p>
+        <h2 class="section-title" id="visit-title" data-anim="lines">How a Visit <em>Works</em></h2>
+      </div>
+      <div class="section-head__aside" data-anim="up"><p>Four simple steps from your first request to understanding your next steps.</p></div>
+    </div>
+    <ol class="steps" data-anim="stagger">
+      {% for title, text in steps %}
+      <li class="steps__item" data-anim-child>
+        <span class="steps__num">{{ loop.index }}</span>
+        <h3 class="steps__title">{{ title }}</h3>
+        <p>{{ text }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="section section--ivory" aria-labelledby="where-title">
+  <div class="container-xl">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow" data-anim="fade">Find us</p>
+        <h2 class="section-title" id="where-title" data-anim="lines">Location &amp; <em>Hours</em></h2>
+      </div>
+    </div>
+    {% include "components/contact_cards.html" %}
+    {{ ui.review_note(clinic.pending_items, "Clinic details awaiting confirmation") }}
+  </div>
+</section>
+
+{% include "home/cta.html" %}
+{% endblock %}

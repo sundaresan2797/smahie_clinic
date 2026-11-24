@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as ui with context %}
+{% block content %}
+{{ ui.page_hero("Legal", "Terms and Conditions", "The terms that apply when you use the " ~ clinic.name ~ " website.", meta.breadcrumbs, "page-hero--compact") }}
+<section class="section section--white section--tight-top">
+  <div class="container-xl">
+    <article class="legal prose">
+      {% if show_review %}
+      <p class="review-banner">{{ ui.icon('info', size=16) }} Draft template — to be reviewed by the clinic and a qualified legal adviser before launch.</p>
+      {% endif %}
+      <p class="legal__updated">Last updated: to be confirmed at launch</p>
+
+      <h2>1. About this website</h2>
+      <p>This website provides general information about {{ clinic.name }} and lets you request an appointment or send a message. By using it, you agree to these terms.</p>
+
+      <h2>2. Not medical advice</h2>
+      <p>Information on this website is general and educational. It is not a diagnosis or a substitute for a consultation with a qualified doctor. Always seek medical advice about your own condition.</p>
+
+      <h2>3. Not for emergencies</h2>
+      <p>The website and its forms are not monitored for emergencies. In a medical emergency, call 112 or 108, or go to the nearest hospital emergency department.</p>
+
+      <h2>4. Appointment requests</h2>
+      <p>Submitting an appointment request does not confirm an appointment. An appointment is confirmed only when the clinic team contacts you. Requested dates and times are preferences and may not be available.</p>
+
+      <h2>5. Acceptable use</h2>
+      <p>Please provide accurate information and do not misuse the website, attempt to gain unauthorised access, or submit spam or harmful content.</p>
+
+      <h2>6. Content and images</h2>
+      <p>Website content, the clinic name and logo, and photographs belong to {{ clinic.name }} or are used with permission, and may not be copied without consent.</p>
+
+      <h2>7. Links</h2>
+      <p>Links to other websites are provided for convenience. We are not responsible for their content.</p>
+
+      <h2>8. Changes</h2>
+      <p>We may update these terms from time to time. Continued use of the website means you accept the latest version. <span class="legal__todo">[Governing law and jurisdiction to be confirmed.]</span></p>
+    </article>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,91 @@
+{# Reusable UI macros. Import with:  {% import "components/macros.html" as ui with context %} #}
+
+{% macro icon(name, cls="", size=20) -%}
+<svg class="icon {{ cls }}" width="{{ size }}" height="{{ size }}" aria-hidden="true" focusable="false"><use href="#{{ name if name.startswith(('s-','v-')) else 'i-' ~ name }}"/></svg>
+{%- endmacro %}
+
+{% macro review(label="Awaiting clinic review", cls="") -%}
+{% if show_review %}<span class="review-flag {{ cls }}" title="Content proposed for the clinic to review before publication">{{ icon('info', size=14) }}{{ label }}</span>{% endif %}
+{%- endmacro %}
+
+{% macro review_note(items, heading="Details awaiting confirmation") -%}
+{% if show_review and items %}
+<aside class="review-note" aria-label="{{ heading }}">
+  <p class="review-note__title">{{ icon('info', size=16) }} {{ heading }}</p>
+  <ul>{% for item in items %}<li>{{ item }}</li>{% endfor %}</ul>
+  <p class="review-note__hint">Shown only in preview mode. Add confirmed details in <code>app/content/</code>.</p>
+</aside>
+{% endif %}
+{%- endmacro %}
+
+{% macro portrait(cls="", sizes="(min-width: 992px) 520px, 90vw", loading="lazy", priority=false, alt=None) -%}
+<picture>
+  <source type="image/avif" srcset="{{ static_url('images/doctor/portrait-480.avif') }} 480w, {{ static_url('images/doctor/portrait-800.avif') }} 800w, {{ static_url('images/doctor/portrait-1122.avif') }} 1122w" sizes="{{ sizes }}">
+  <source type="image/webp" srcset="{{ static_url('images/doctor/portrait-480.webp') }} 480w, {{ static_url('images/doctor/portrait-800.webp') }} 800w, {{ static_url('images/doctor/portrait-1122.webp') }} 1122w" sizes="{{ sizes }}">
+  <img class="{{ cls }}" src="{{ static_url('images/doctor/portrait-800.jpg') }}" width="1122" height="1402" alt="{{ alt if alt is not none else doctor.photo_alt }}" loading="{{ loading }}" decoding="async"{% if priority %} fetchpriority="high"{% endif %}>
+</picture>
+{%- endmacro %}
+
+{% macro emblem(size=48, cls="") -%}
+<picture class="{{ cls }}">
+  <source type="image/webp" srcset="{{ static_url('images/logo/emblem-96.webp') }} 1x, {{ static_url('images/logo/emblem-192.webp') }} 2x">
+  <img src="{{ static_url('images/logo/emblem-96.png') }}" width="{{ size }}" height="{{ size }}" alt="" decoding="async">
+</picture>
+{%- endmacro %}
+
+{% macro service_card(s, featured=False) -%}
+<a class="service-card{% if featured %} service-card--featured{% endif %}" href="{{ s.path }}" data-anim-child>
+  <span class="service-card__top">
+    <span class="service-card__icon">{{ icon('s-' ~ s.icon, size=56) }}</span>
+    {% if featured %}<span class="service-card__label">A good first step</span>{% endif %}
+  </span>
+  <span class="service-card__body">
+    <span class="service-card__title">{{ s.title }}</span>
+    <span class="service-card__text">{{ s.short }}</span>
+  </span>
+  <span class="service-card__foot">
+    <span class="service-card__more">Learn more <span class="arrow-dot">{{ icon('arrow-right', size=16) }}</span></span>
+    {% if not s.approved %}{{ review("Draft") }}{% endif %}
+  </span>
+</a>
+{%- endmacro %}
+
+{% macro service_cta() -%}
+<div class="service-cta" data-anim-child>
+  <div>
+    <p class="service-cta__title">Not sure where to start?</p>
+    <p class="service-cta__text">Describe your concern when you request an appointment, or call the clinic and the team will guide you.</p>
+  </div>
+  <div class="btn-row">
+    <a class="btn-soc btn-soc--gold" href="/appointment">Request Appointment <span class="btn-soc__icon">{{ icon('arrow-right', size=16) }}</span></a>
+    <a class="btn-soc btn-soc--light" href="{{ clinic.tel_href }}">{{ icon('phone', size=18) }} {{ clinic.phone_display }}</a>
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro page_hero(eyebrow, title_html, lead=None, crumbs=None, extra_cls="") -%}
+<section class="page-hero {{ extra_cls }}" aria-labelledby="page-title">
+  <div class="page-hero__deco" aria-hidden="true">
+    <svg viewBox="0 0 600 600" class="page-hero__arcs"><circle cx="420" cy="180" r="170"/><circle cx="420" cy="180" r="240"/><circle cx="420" cy="180" r="310"/></svg>
+  </div>
+  <div class="container-xl">
+    {% if crumbs %}
+    <nav aria-label="Breadcrumb" class="breadcrumbs" data-anim="fade">
+      <ol>
+        {% for name, path in crumbs %}
+        <li>{% if loop.last %}<span aria-current="page">{{ name }}</span>{% else %}<a href="{{ path }}">{{ name }}</a>{% endif %}</li>
+        {% endfor %}
+      </ol>
+    </nav>
+    {% endif %}
+    <p class="eyebrow" data-anim="fade">{{ eyebrow }}</p>
+    <h1 class="page-hero__title" id="page-title" data-anim="lines">{{ title_html }}</h1>
+    {% if lead %}<p class="page-hero__lead" data-anim="up">{{ lead }}</p>{% endif %}
+    {{ caller() if caller is defined else "" }}
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro field_error(errors, name) -%}
+{% if errors.get(name) %}<p class="field-error" id="{{ name }}-error">{{ icon('alert', size=16) }}<span>{{ errors.get(name) }}</span></p>{% else %}<p class="field-error" id="{{ name }}-error" hidden></p>{% endif %}
+{%- endmacro %}

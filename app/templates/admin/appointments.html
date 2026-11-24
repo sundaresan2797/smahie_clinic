@@ -1,0 +1,78 @@
+{% extends "admin/base.html" %}
+{% block title %}Appointment requests{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <h1 class="admin-title">Appointment requests</h1>
+    <p class="admin-sub">{{ total }} matching request{{ '' if total == 1 else 's' }} · times shown in IST</p>
+  </div>
+  {% if admin.is_admin %}
+  <a class="admin-btn" href="/admin/export.csv{% if filters.query_string() %}?{{ filters.query_string() }}{% endif %}">Export CSV</a>
+  {% endif %}
+</div>
+
+<ul class="admin-stats">
+  <li><a href="/admin/appointments"{% if not filters.status %} aria-current="true"{% endif %}><span>All</span><strong>{{ counts.values() | sum }}</strong></a></li>
+  {% for s in statuses %}
+  <li><a href="/admin/appointments?status={{ s }}" class="status-{{ s }}"{% if filters.status == s %} aria-current="true"{% endif %}><span>{{ s | capitalize }}</span><strong>{{ counts.get(s, 0) }}</strong></a></li>
+  {% endfor %}
+</ul>
+
+<form class="admin-filters" method="get" action="/admin/appointments" role="search">
+  <div class="field">
+    <label for="q">Search</label>
+    <input class="input" type="search" id="q" name="q" value="{{ filters.q }}" placeholder="Name, mobile or reference">
+  </div>
+  <div class="field">
+    <label for="status">Status</label>
+    <select class="input" id="status" name="status">
+      <option value="">Any</option>
+      {% for s in statuses %}<option value="{{ s }}"{% if filters.status == s %} selected{% endif %}>{{ s | capitalize }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="field">
+    <label for="from">Preferred from</label>
+    <input class="input" type="date" id="from" name="from" value="{{ filters.date_from.isoformat() if filters.date_from else '' }}">
+  </div>
+  <div class="field">
+    <label for="to">Preferred to</label>
+    <input class="input" type="date" id="to" name="to" value="{{ filters.date_to.isoformat() if filters.date_to else '' }}">
+  </div>
+  <div class="admin-filters__actions">
+    <button class="admin-btn" type="submit">Apply</button>
+    <a class="admin-btn admin-btn--ghost" href="/admin/appointments">Reset</a>
+  </div>
+</form>
+
+{% if rows %}
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr><th scope="col">Reference</th><th scope="col">Patient</th><th scope="col">Mobile</th><th scope="col">Preferred</th><th scope="col">Status</th><th scope="col">Received</th></tr>
+    </thead>
+    <tbody>
+      {% for a in rows %}
+      <tr>
+        <td><a class="admin-ref" href="/admin/appointments/{{ a.id }}">{{ a.reference }}</a></td>
+        <td>{{ a.full_name }}</td>
+        <td><a href="tel:{{ a.phone }}">{{ a.phone | phone }}</a></td>
+        <td>{{ a.preferred_date | nice_date }}<br><small>{{ a.preferred_session | capitalize }}{% if a.preferred_time %} · {{ a.preferred_time | nice_time }}{% endif %}</small>{% if a.preferred_date == today %} <span class="admin-today">Today</span>{% endif %}</td>
+        <td><span class="status-pill status-{{ a.status }}">{{ a.status | capitalize }}</span></td>
+        <td><small>{{ a.created_at | ist_datetime }}</small></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% if pages > 1 %}
+<nav class="admin-pager" aria-label="Pages">
+  {% set qs = filters.query_string() %}
+  {% if page > 1 %}<a class="admin-btn admin-btn--ghost" href="?page={{ page - 1 }}{% if qs %}&{{ qs }}{% endif %}">Previous</a>{% endif %}
+  <span>Page {{ page }} of {{ pages }}</span>
+  {% if page < pages %}<a class="admin-btn admin-btn--ghost" href="?page={{ page + 1 }}{% if qs %}&{{ qs }}{% endif %}">Next</a>{% endif %}
+</nav>
+{% endif %}
+{% else %}
+<div class="admin-empty"><p>No appointment requests match these filters.</p></div>
+{% endif %}
+{% endblock %}

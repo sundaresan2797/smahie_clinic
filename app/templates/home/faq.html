@@ -1,0 +1,18 @@
+{% import "components/macros.html" as ui with context %}
+<section class="faq-home" aria-labelledby="faq-title">
+  <div class="container-xl faq-home__grid">
+    <div class="faq-home__intro">
+      <p class="eyebrow" data-anim="fade">Patient information</p>
+      <h2 class="section-title" id="faq-title" data-anim="lines">Questions, <em>Answered</em></h2>
+      <p class="section-lead" data-anim="up">Simple answers to the questions patients ask most often before their first visit.</p>
+      <div class="faq-home__card" data-anim="up">
+        <p>Still have a question?</p>
+        <a class="btn-soc btn-soc--primary btn-soc--sm" href="{{ clinic.tel_href }}">{{ ui.icon('phone', size=16) }} {{ clinic.phone_display }}</a>
+        <a class="text-link" href="/faq">All patient information {{ ui.icon('arrow-right', size=16) }}</a>
+      </div>
+    </div>
+    <div data-anim="stagger">
+      {% with faq_id = "faqHome" %}{% include "components/faq_accordion.html" %}{% endwith %}
+    </div>
+  </div>
+</section>

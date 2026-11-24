@@ -1,0 +1,53 @@
+/* ==========================================================================
+   Motion: loader, pre-animation states, reduced-motion handling.
+
+   Elements are hidden ONLY while <html> has .motion-ok, which the inline head
+   script sets when motion is allowed. If scripts fail to load, a failsafe
+   removes .motion-ok after 4s, so content is never permanently hidden.
+   ========================================================================== */
+
+/* ---- Page loader (first visit per session, homepage only) -------------- */
+.loader { display: none; }
+.show-loader .loader {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  background: var(--ivory);
+}
+.show-loader body { overflow: hidden; }
+.loader__inner { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.loader__mark img { width: 88px; height: 88px; }
+.loader__word { font-family: var(--font-serif); font-weight: 650; font-size: 1.35rem; letter-spacing: 0.12em; color: var(--navy); }
+.loader__word em { font-family: var(--font-sans); font-style: normal; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold-ink); margin-left: 0.4rem; }
+.loader__line { position: relative; width: 160px; height: 2px; overflow: hidden; border-radius: 2px; background: var(--line); }
+.loader__line span { position: absolute; inset: 0; background: var(--gold); transform: scaleX(0); transform-origin: left; }
+
+/* ---- Pre-animation states ---------------------------------------------- */
+.motion-ok [data-anim="up"],
+.motion-ok [data-anim="fade"],
+.motion-ok [data-anim-child],
+.motion-ok [data-story-item] { opacity: 0; }
+.motion-ok [data-anim="lines"] { visibility: hidden; }
+.motion-ok [data-anim="rule"] { transform: scaleX(0); }
+.motion-ok [data-anim="mask"] { clip-path: inset(100% 0 0 0); }
+
+/* Homepage intro sequence */
+.motion-ok.page-home [data-hero],
+.motion-ok.page-home [data-intro] { visibility: hidden; }
+.motion-ok.page-home .hero__curtain { transform: scaleY(1); }
+
+/* Split text helpers */
+.split-line { padding-bottom: 0.06em; margin-bottom: -0.06em; }
+
+/* ---- Reduced motion ---------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero__orb > span, .cta-band__rings { animation: none !important; }
+}

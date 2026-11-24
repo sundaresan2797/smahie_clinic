@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as ui with context %}
+{% block preload %}
+  <link rel="preload" as="image" type="image/avif" fetchpriority="high"
+        imagesrcset="{{ static_url('images/doctor/portrait-480.avif') }} 480w, {{ static_url('images/doctor/portrait-800.avif') }} 800w, {{ static_url('images/doctor/portrait-1122.avif') }} 1122w"
+        imagesizes="(min-width: 992px) 460px, 88vw">
+{% endblock %}
+{% block content %}
+<section class="profile-hero" aria-labelledby="page-title">
+  <div class="page-hero__deco" aria-hidden="true">
+    <svg viewBox="0 0 600 600" class="page-hero__arcs"><circle cx="420" cy="180" r="170"/><circle cx="420" cy="180" r="240"/><circle cx="420" cy="180" r="310"/></svg>
+  </div>
+  <div class="container-xl profile-hero__grid">
+    <div class="profile-hero__copy">
+      <nav aria-label="Breadcrumb" class="breadcrumbs" data-anim="fade">
+        <ol>{% for name, path in meta.breadcrumbs %}<li>{% if loop.last %}<span aria-current="page">{{ name }}</span>{% else %}<a href="{{ path }}">{{ name }}</a>{% endif %}</li>{% endfor %}</ol>
+      </nav>
+      <p class="eyebrow" data-anim="fade">Meet the doctor</p>
+      <h1 class="page-hero__title" id="page-title" data-anim="lines">{{ doctor.name }}</h1>
+      <p class="profile-hero__quals" data-anim="up">{{ doctor.qualifications }}</p>
+      <p class="profile-hero__role" data-anim="up">{{ doctor.title }}</p>
+      <span class="gold-rule" data-anim="rule" aria-hidden="true"></span>
+      <div class="btn-row" data-anim="up">
+        <a class="btn-soc btn-soc--primary" href="/appointment" data-magnetic>Book an Appointment <span class="btn-soc__icon">{{ ui.icon('arrow-right', size=16) }}</span></a>
+        <a class="btn-soc btn-soc--ghost" href="{{ clinic.tel_href }}">{{ ui.icon('phone', size=18) }} {{ clinic.phone_display }}</a>
+      </div>
+    </div>
+    <div class="profile-hero__media">
+      <div class="profile-hero__frame">
+        {{ ui.portrait("profile-hero__img", sizes="(min-width: 992px) 460px, 88vw", loading="eager", priority=true) }}
+      </div>
+      <span class="profile-hero__ring" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
+
+<section class="section section--white" aria-labelledby="profile-title">
+  <div class="container-xl split split--wide">
+    <div class="split__main">
+      <p class="eyebrow" data-anim="fade">Profile</p>
+      <h2 class="section-title" id="profile-title" data-anim="lines">About <em>the Doctor</em></h2>
+      <span class="gold-rule" data-anim="rule" aria-hidden="true"></span>
+      <div class="prose" data-anim="up">
+        <p>{{ doctor.name }} is a {{ doctor.title }} who holds {{ doctor.qualifications }} qualifications. He sees patients at {{ clinic.name }} in {{ clinic.locality }}, {{ clinic.area }}, {{ clinic.city }}.</p>
+        <p>Consultations focus on understanding your concerns about bones, joints, the spine and movement, examining the area that troubles you, and explaining the findings and options in clear, everyday language.</p>
+        {% if doctor.experience_summary %}<p>{{ doctor.experience_summary }}</p>{% endif %}
+      </div>
+      {% if doctor.areas_of_interest %}
+      <h3 class="subhead">Areas of interest</h3>
+      <ul class="chip-list">{% for a in doctor.areas_of_interest %}<li>{{ a }}</li>{% endfor %}</ul>
+      {% endif %}
+    </div>
+    <aside class="split__aside">
+      <dl class="fact-list fact-list--stack" data-anim="stagger">
+        <div class="fact-list__item" data-anim-child><dt>Qualifications</dt><dd>{{ doctor.qualifications }}</dd></div>
+        <div class="fact-list__item" data-anim-child><dt>Speciality</dt><dd>{{ doctor.title }}</dd></div>
+        <div class="fact-list__item" data-anim-child><dt>Clinic</dt><dd>{{ clinic.name }}, {{ clinic.area }}</dd></div>
+        <div class="fact-list__item" data-anim-child><dt>Consultation hours</dt><dd>{% for s in clinic.sessions %}<span>{{ s.label }}: {{ s.display }}</span>{% endfor %}</dd></div>
+        {% if doctor.registration_number %}<div class="fact-list__item" data-anim-child><dt>Registration</dt><dd>{{ doctor.registration_number }}</dd></div>{% endif %}
+        {% if doctor.languages %}<div class="fact-list__item" data-anim-child><dt>Languages</dt><dd>{{ doctor.languages | join(', ') }}</dd></div>{% endif %}
+        {% if clinic.hospital_affiliations %}<div class="fact-list__item" data-anim-child><dt>Hospital affiliations</dt><dd>{{ clinic.hospital_affiliations | join(', ') }}</dd></div>{% endif %}
+      </dl>
+      {{ ui.review_note(doctor.pending_items + (["Current hospital affiliations"] if not clinic.hospital_affiliations else []), "Profile details awaiting confirmation") }}
+    </aside>
+  </div>
+</section>
+
+<section class="section section--ivory" aria-labelledby="consult-title">
+  <div class="container-xl">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow" data-anim="fade">Consulting at {{ clinic.name }}</p>
+        <h2 class="section-title" id="consult-title" data-anim="lines">Where &amp; When to <em>Visit</em></h2>
+      </div>
+    </div>
+    {% include "components/contact_cards.html" %}
+  </div>
+</section>
+
+{% include "home/cta.html" %}
+{% endblock %}

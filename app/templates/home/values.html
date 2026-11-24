@@ -1,0 +1,22 @@
+{% import "components/macros.html" as ui with context %}
+<section class="values" aria-labelledby="values-title">
+  <div class="container-xl values__grid">
+    <div class="values__intro">
+      <p class="eyebrow" data-anim="fade">Why choose us</p>
+      <h2 class="section-title" id="values-title" data-anim="lines">Why Choose <em>{{ clinic.name }}?</em></h2>
+      <span class="gold-rule" data-anim="rule" aria-hidden="true"></span>
+      <p class="section-lead" data-anim="up">Good orthopaedic care starts with understanding you — your symptoms, your routine and what matters most to you in everyday life.</p>
+      <a class="text-link" href="/about" data-anim="up">More about the clinic {{ ui.icon('arrow-right', size=16) }}</a>
+    </div>
+    <ul class="value-cards" data-anim="stagger">
+      {% for v in values_list %}
+      <li class="value-card" data-anim-child>
+        <span class="value-card__num">0{{ loop.index }}</span>
+        <span class="value-card__icon">{{ ui.icon('v-' ~ v.icon, size=26) }}</span>
+        <h3 class="value-card__title">{{ v.title }}</h3>
+        <p class="value-card__text">{{ v.text }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>

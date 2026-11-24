@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as ui with context %}
+{% block content %}
+{% set title %}Patient <em>Information</em>{% endset %}
+{{ ui.page_hero("Questions & answers", title, "Everything you need to know before requesting an appointment or visiting " ~ clinic.name ~ ".", meta.breadcrumbs) }}
+
+<section class="section section--white section--tight-top" aria-labelledby="faq-list-title">
+  <div class="container-xl split split--wide">
+    <div class="split__main">
+      <h2 class="visually-hidden" id="faq-list-title">Frequently asked questions</h2>
+      <div data-anim="stagger">
+        {% with faq_id = "faqPage" %}{% include "components/faq_accordion.html" %}{% endwith %}
+      </div>
+    </div>
+    <aside class="split__aside">
+      <div class="sticky-stack">
+        <div class="aside-card">
+          <h2 class="aside-card__title">How appointments work</h2>
+          <ol class="mini-steps mini-steps--compact">
+            {% for title, text in steps %}<li><span class="mini-steps__num">{{ loop.index }}</span><p><strong>{{ title }}.</strong> {{ text }}</p></li>{% endfor %}
+          </ol>
+          <a class="btn-soc btn-soc--primary btn-soc--sm" href="/appointment">Request Appointment</a>
+        </div>
+        <div class="safety-note safety-note--compact">
+          {{ ui.icon('alert', size=20) }}
+          <p><strong>In an emergency</strong> call <a href="tel:112">112</a> or <a href="tel:108">108</a>, or go to the nearest emergency department.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+{% include "home/cta.html" %}
+{% endblock %}

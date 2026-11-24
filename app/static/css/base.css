@@ -1,0 +1,260 @@
+/* ==========================================================================
+   Base: typography, global elements, utilities, accessibility helpers
+   ========================================================================== */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.lenis) { scroll-behavior: smooth; }
+}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+
+body {
+  margin: 0;
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  font-weight: 450;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+main:focus { outline: none; }
+
+img, svg, video, picture { max-width: 100%; }
+img { height: auto; display: block; }
+picture { display: contents; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  color: var(--navy);
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+  margin: 0 0 0.6em;
+  text-wrap: balance;
+}
+p { margin: 0 0 1em; text-wrap: pretty; }
+
+/* Serif italic accent used inside headings: "Move Better. Live *Stronger.*" */
+h1 em, h2 em, h3 em, .accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--gold-ink);
+}
+
+a {
+  color: var(--navy);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 0.25s var(--ease-out);
+}
+a:hover { color: var(--blue); }
+
+strong, b { font-weight: 750; }
+small { font-size: 0.875em; }
+code {
+  font-size: 0.88em;
+  color: var(--navy);
+  background: var(--ivory-200);
+  padding: 0.1em 0.35em;
+  border-radius: 6px;
+}
+
+::selection { background: var(--gold-soft); color: var(--midnight); }
+
+/* Visible, consistent focus indicator */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.on-dark :focus-visible, .site-footer :focus-visible, .story :focus-visible, .cta-band :focus-visible,
+.intro :focus-visible, .mobile-nav :focus-visible, .aside-card--navy :focus-visible, .help-card :focus-visible {
+  outline-color: var(--gold-soft);
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 3000;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-pill);
+  background: var(--midnight);
+  color: #fff;
+  font-weight: 700;
+  transform: translateY(-160%);
+  transition: transform 0.25s var(--ease-out);
+}
+.skip-link:focus { transform: none; color: #fff; }
+
+.icon {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+}
+.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ---- Type helpers ------------------------------------------------------- */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+}
+.eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1.5px;
+  background: currentColor;
+  opacity: 0.7;
+}
+.eyebrow--light { color: var(--gold); }
+.hero__eyebrow::before { display: none; }
+
+.section-title {
+  font-size: var(--fs-h2);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-weight: 760;
+  margin-bottom: 0.5em;
+}
+.section-lead {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 46ch;
+}
+.subhead {
+  font-size: var(--fs-h4);
+  margin: 2.5rem 0 1rem;
+}
+
+.gold-rule {
+  display: block;
+  width: 72px;
+  height: 2px;
+  margin: 0.25rem 0 1.75rem;
+  background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+  border-radius: 2px;
+  transform-origin: left center;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 750;
+  color: var(--navy);
+  text-decoration: none;
+  padding-block: 0.4rem;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat;
+  transition: background-size 0.45s var(--ease-out), color 0.25s;
+}
+.text-link .icon { transition: transform 0.45s var(--ease-out); }
+.text-link:hover { background-size: 100% 1.5px; color: var(--navy); }
+.text-link:hover .icon { transform: translateX(4px); }
+
+.prose { max-width: 66ch; }
+.prose p, .prose li { color: var(--ink); }
+.prose h2 { font-size: var(--fs-h4); margin: 2.25rem 0 0.75rem; }
+.prose ul { padding-left: 1.2rem; }
+.prose li { margin-bottom: 0.4rem; }
+
+/* ---- Review markers (preview mode only) -------------------------------- */
+.review-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.7rem;
+  border: 1px dashed #c9922b;
+  border-radius: var(--radius-pill);
+  background: #fff6e0;
+  color: #6e4300;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.review-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin: 0 0 2rem;
+  padding: 0.85rem 1.1rem;
+  border: 1px dashed #c9922b;
+  border-radius: var(--radius-sm);
+  background: #fff8e8;
+  color: #5e3a00;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+.review-banner .icon { margin-top: 0.2rem; }
+.review-note {
+  margin-top: 2rem;
+  padding: 1.25rem 1.4rem;
+  border: 1px dashed #c9922b;
+  border-radius: var(--radius-md);
+  background: #fff8e8;
+  color: #5e3a00;
+  font-size: var(--fs-sm);
+}
+.review-note__title { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+.review-note ul { margin: 0 0 0.6rem; padding-left: 1.2rem; }
+.review-note__hint { margin: 0; font-size: var(--fs-xs); opacity: 0.85; }
+
+/* ---- Sections ---------------------------------------------------------- */
+.section { padding-block: var(--space-section); position: relative; }
+.section--white { background: var(--white); }
+.section--ivory { background: var(--ivory); }
+.section--tight-top { padding-top: clamp(2rem, 1rem + 3vw, 4rem); }
+
+.container-xl { --bs-gutter-x: calc(var(--gutter) * 2); max-width: 1320px; }
+
+.btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; }
+.btn-row--center { justify-content: center; }
+
+.chip-list { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; padding: 0; margin: 0 0 1.5rem; }
+.chip-list li {
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-pill);
+  background: var(--ivory);
+  border: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.disclaimer { font-size: var(--fs-sm); color: var(--muted); }
+
+/* ---- No-JavaScript fallbacks ------------------------------------------ */
+.no-js .accordion-collapse.collapse { display: block; }
+.no-js .accordion-button::after { display: none; }
+.no-js .anatomy__tabs, .no-js .anat-hotspot { display: none; }
+/* Bootstrap's reboot uses [hidden] { display: none !important }, so this must be !important too. */
+.no-js .anatomy__panel[hidden] { display: block !important; margin-bottom: 1rem; }
+.no-js .menu-toggle, .no-js .back-to-top { display: none; }
+.no-js .primary-nav { display: block; }

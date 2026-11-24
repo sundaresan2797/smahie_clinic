@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+<div class="admin-login">
+  <div class="admin-login__card">
+    <img class="admin-login__mark" src="{{ static_url('images/logo/emblem-192.png') }}" width="72" height="72" alt="">
+    <h1 class="admin-login__title">Clinic admin</h1>
+    <p class="admin-login__sub">{{ clinic.name }} — authorised staff only</p>
+    {% if error %}<div class="form-alert form-alert--error" role="alert"><span>{{ error }}</span></div>{% endif %}
+    <form method="post" action="/admin/login" class="admin-form">
+      <input type="hidden" name="form_token" value="{{ form_token }}">
+      <input type="hidden" name="next" value="{{ next }}">
+      <div class="field">
+        <label for="email">Email</label>
+        <input class="input" type="email" id="email" name="email" autocomplete="username" required value="{{ email }}">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input class="input" type="password" id="password" name="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn-soc btn-soc--primary w-100" type="submit">Sign in</button>
+    </form>
+    <p class="admin-login__note">Accounts are created by the clinic administrator using <code>python -m scripts.create_admin</code>.</p>
+  </div>
+</div>
+{% endblock %}

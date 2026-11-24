@@ -1,0 +1,29 @@
+<section class="intro" id="intro" aria-labelledby="intro-title">
+  <div class="intro__panel" data-intro-panel>
+    <div class="intro__glow" aria-hidden="true"></div>
+    <div class="container-xl intro__inner">
+      <div class="intro__head">
+        <p class="eyebrow eyebrow--light" data-anim="fade">Welcome to {{ clinic.name }}</p>
+        <h2 class="intro__title" id="intro-title" data-anim="lines">Your Movement <em>Matters.</em></h2>
+      </div>
+      <p class="intro__statement" data-scrub-words>
+        Whether it is a stiff knee on the stairs, an aching back after a long day, or an injury that is
+        slowing you down — the way you move shapes the way you live. At {{ clinic.name }} in {{ clinic.area }},
+        we take the time to listen, explain things clearly and help you understand your next step.
+      </p>
+      <div class="intro__wave" aria-hidden="true">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" data-anim="draw-scrub">
+          <path class="draw-path" d="M0 70 C 120 70, 160 20, 260 20 S 400 100, 520 100 S 660 30, 780 30 S 940 90, 1040 80 S 1160 50, 1200 50"/>
+        </svg>
+      </div>
+      <ul class="pillars" data-anim="stagger">
+        {% for p in clinic.pillars %}
+        <li class="pillars__item" data-anim-child>
+          <span class="pillars__num">0{{ loop.index }}</span>
+          <span class="pillars__name">{{ p }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>

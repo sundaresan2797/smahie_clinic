@@ -1,0 +1,74 @@
+{% import "components/macros.html" as ui with context %}
+{% set errors = contact_errors %}
+{% set values = contact_values %}
+{% macro described(name, errors, hint=None) -%}
+aria-describedby="{% if hint %}c-{{ name }}-hint {% endif %}{{ name }}-error"{% if errors.get(name) %} aria-invalid="true"{% endif %}
+{%- endmacro %}
+<div class="form-card" id="contact-form">
+  {% if sent %}
+  <div class="form-success" tabindex="-1" data-autofocus>
+    <span class="form-success__icon" aria-hidden="true">{{ ui.icon('check', size=34) }}</span>
+    <h2 class="form-success__title">Message sent</h2>
+    <p class="form-success__text">Thank you — your message has been sent. The clinic team will reply as soon as possible.</p>
+    <a class="btn-soc btn-soc--ghost btn-soc--sm" href="/contact">Send another message</a>
+  </div>
+  {% else %}
+  <form class="soc-form" method="post" action="/contact" novalidate data-ajax-form data-endpoint="/api/contact" data-require-one="phone,email">
+    <input type="hidden" name="form_token" value="{{ contact_token }}">
+    <div class="hp-field" aria-hidden="true">
+      <label for="contact-website">Leave this field empty</label>
+      <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+    <div class="form-alert form-alert--error" role="alert" data-form-alert{% if not (contact_message or errors.get('form')) %} hidden{% endif %}>
+      {{ ui.icon('alert', size=18) }}<span data-form-alert-text>{{ errors.get('form') or contact_message or '' }}</span>
+    </div>
+    <div class="form-grid">
+      <div class="field field--full">
+        <label for="c-name">Your name <span class="req" aria-hidden="true">*</span></label>
+        <input class="input" type="text" id="c-name" name="name" required minlength="2" maxlength="80" autocomplete="name"
+               value="{{ values.get('name', '') }}" {{ described('name', errors) }}>
+        {{ ui.field_error(errors, 'name') }}
+      </div>
+      <div class="field">
+        <label for="c-phone">Mobile number</label>
+        <input class="input" type="tel" id="c-phone" name="phone" inputmode="tel" autocomplete="tel" maxlength="20"
+               value="{{ values.get('phone', '') }}" {{ described('phone', errors, hint=True) }}>
+        <p class="hint" id="c-phone-hint">Give a mobile number or an email address.</p>
+        {{ ui.field_error(errors, 'phone') }}
+      </div>
+      <div class="field">
+        <label for="c-email">Email</label>
+        <input class="input" type="email" id="c-email" name="email" maxlength="254" autocomplete="email"
+               value="{{ values.get('email', '') }}" {{ described('email', errors) }}>
+        {{ ui.field_error(errors, 'email') }}
+      </div>
+      <div class="field field--full">
+        <label for="c-message">Message <span class="req" aria-hidden="true">*</span></label>
+        <textarea class="input input--area" id="c-message" name="message" rows="5" required minlength="10" maxlength="1000" data-counter
+                  {{ described('message', errors, hint=True) }}>{{ values.get('message', '') }}</textarea>
+        <p class="hint" id="c-message-hint">For general questions only — please do not share detailed medical information. <span class="counter" data-counter-output aria-live="polite"></span></p>
+        {{ ui.field_error(errors, 'message') }}
+      </div>
+      <div class="field field--full field--check">
+        <label class="check">
+          <input type="checkbox" name="consent" value="on" required{% if values.get('consent') %} checked{% endif %} {{ described('consent', errors) }}>
+          <span>I agree that {{ clinic.name }} may use these details to reply to my message, as described in the <a href="/privacy" target="_blank" rel="noopener">Privacy Policy<span class="visually-hidden"> (opens in a new tab)</span></a>. <span class="req" aria-hidden="true">*</span></span>
+        </label>
+        {{ ui.field_error(errors, 'consent') }}
+      </div>
+    </div>
+    <div class="form-submit">
+      <button class="btn-soc btn-soc--primary" type="submit" data-submit>
+        <span data-submit-label>Send Message</span>
+        <span class="btn-soc__icon">{{ ui.icon('arrow-right', size=16) }}</span>
+      </button>
+    </div>
+  </form>
+  <div class="form-success" data-form-success hidden tabindex="-1">
+    <span class="form-success__icon" aria-hidden="true">{{ ui.icon('check', size=34) }}</span>
+    <h2 class="form-success__title">Message sent</h2>
+    <p class="form-success__text" data-form-success-text></p>
+    <a class="btn-soc btn-soc--ghost btn-soc--sm" href="/contact">Send another message</a>
+  </div>
+  {% endif %}
+</div>

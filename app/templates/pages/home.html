@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block preload %}
+  <link rel="preload" as="image" type="image/avif" fetchpriority="high"
+        imagesrcset="{{ static_url('images/doctor/portrait-480.avif') }} 480w, {{ static_url('images/doctor/portrait-800.avif') }} 800w, {{ static_url('images/doctor/portrait-1122.avif') }} 1122w"
+        imagesizes="(min-width: 992px) 500px, 86vw">
+{% endblock %}
+{% block content %}
+  {% include "home/hero.html" %}
+  {% include "home/intro.html" %}
+  {% include "home/values.html" %}
+  {% include "home/doctor.html" %}
+  {% include "home/services.html" %}
+  {% include "home/anatomy.html" %}
+  {% include "home/story.html" %}
+  {% include "home/gallery.html" %}
+  {% include "home/faq.html" %}
+  {% include "home/cta.html" %}
+  {% include "home/contact.html" %}
+{% endblock %}

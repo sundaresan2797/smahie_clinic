@@ -1,0 +1,12 @@
+# Development, testing and asset-build tools.
+-r requirements.txt
+pytest==9.2.0
+httpx==0.28.1
+ruff==0.17.6
+playwright==1.65.2
+pytest-playwright==0.10.0
+# scripts/build_images.py
+pillow==13.0.0
+numpy==2.4.6
+fonttools==4.68.0
+brotli==1.2.1

@@ -1,0 +1,57 @@
+{# Expects `gallery` (list of GalleryItem). Each tile is a button that opens the lightbox;
+   the full-size content lives in an inert <template>. #}
+{% import "components/macros.html" as ui with context %}
+<ul class="gallery-grid" data-anim="stagger">
+  {% for item in gallery %}
+  <li class="gallery-grid__cell gallery-grid__cell--{{ item.layout }}" data-anim-child>
+    <button type="button" class="gallery-item" data-gallery-item data-title="{{ item.title }}" data-caption="{{ item.caption }}"
+            aria-label="View larger: {{ item.title }}">
+      {% if item.image %}
+      <picture>
+        <source type="image/avif" srcset="{% for w in item.sizes %}{{ static_url('images/' ~ item.image ~ '-' ~ w ~ '.avif') }} {{ w }}w{{ ', ' if not loop.last }}{% endfor %}" sizes="(min-width: 1200px) 25vw, (min-width: 768px) 33vw, 50vw">
+        <source type="image/webp" srcset="{% for w in item.sizes %}{{ static_url('images/' ~ item.image ~ '-' ~ w ~ '.webp') }} {{ w }}w{{ ', ' if not loop.last }}{% endfor %}" sizes="(min-width: 1200px) 25vw, (min-width: 768px) 33vw, 50vw">
+        <img src="{{ static_url('images/' ~ item.image ~ '-800.jpg') }}" width="{{ item.width }}" height="{{ item.height }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+      </picture>
+      {% else %}
+      <span class="gallery-placeholder">
+        {{ ui.icon('camera', size=30) }}
+        <span class="gallery-placeholder__text">Photo coming soon</span>
+      </span>
+      {% endif %}
+      <span class="gallery-item__caption"><span>{{ item.title }}</span>{{ ui.icon('expand', size=16) }}</span>
+      <template>
+        {% if item.image %}
+        <picture>
+          <source type="image/avif" srcset="{{ static_url('images/' ~ item.image ~ '-1122.avif') }}">
+          <source type="image/webp" srcset="{{ static_url('images/' ~ item.image ~ '-1122.webp') }}">
+          <img src="{{ static_url('images/' ~ item.image ~ '-800.jpg') }}" width="{{ item.width }}" height="{{ item.height }}" alt="{{ item.alt }}">
+        </picture>
+        {% else %}
+        <div class="lightbox-placeholder">
+          {{ ui.icon('camera', size=40) }}
+          <p><strong>{{ item.title }}</strong><br>A real photograph will appear here once the clinic supplies it.</p>
+        </div>
+        {% endif %}
+      </template>
+    </button>
+  </li>
+  {% endfor %}
+</ul>
+
+<div class="modal fade lightbox" id="lightbox" tabindex="-1" aria-labelledby="lightbox-title" aria-hidden="true" data-lightbox data-lenis-prevent>
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="lightbox__bar">
+        <h2 class="lightbox__title" id="lightbox-title" data-lightbox-title>Gallery</h2>
+        <span class="lightbox__counter" data-lightbox-counter aria-live="polite"></span>
+        <button type="button" class="lightbox__btn" data-bs-dismiss="modal" aria-label="Close gallery">{{ ui.icon('close', size=22) }}</button>
+      </div>
+      <figure class="lightbox__figure">
+        <div class="lightbox__stage" data-lightbox-stage></div>
+        <figcaption class="lightbox__caption" data-lightbox-caption></figcaption>
+      </figure>
+      <button type="button" class="lightbox__nav lightbox__nav--prev" data-lightbox-prev aria-label="Previous image">{{ ui.icon('chevron-left', size=24) }}</button>
+      <button type="button" class="lightbox__nav lightbox__nav--next" data-lightbox-next aria-label="Next image">{{ ui.icon('chevron-right', size=24) }}</button>
+    </div>
+  </div>
+</div>

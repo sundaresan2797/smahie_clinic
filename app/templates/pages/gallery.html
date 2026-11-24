@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as ui with context %}
+{% block content %}
+{% set title %}Inside <em>the Clinic</em>{% endset %}
+{{ ui.page_hero("Gallery", title, "A look at " ~ clinic.name ~ " in " ~ clinic.locality ~ ", " ~ clinic.area ~ ". Select any image to view it larger.", meta.breadcrumbs) }}
+<section class="section section--white section--tight-top" aria-label="Photographs">
+  <div class="container-xl">
+    {% if show_review %}
+    <p class="review-banner" data-anim="fade">{{ ui.icon('camera', size=16) }} Placeholders mark where real, clinic-approved photographs will go. Stock or AI-generated interiors are never used to represent the clinic.</p>
+    {% endif %}
+    {% include "components/gallery_grid.html" %}
+  </div>
+</section>
+{% endblock %}

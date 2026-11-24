@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as ui with context %}
+{% block content %}
+{{ ui.page_hero("Legal", "Privacy Policy", "How " ~ clinic.name ~ " handles the information you share through this website.", meta.breadcrumbs, "page-hero--compact") }}
+<section class="section section--white section--tight-top">
+  <div class="container-xl">
+    <article class="legal prose">
+      {% if show_review %}
+      <p class="review-banner">{{ ui.icon('info', size=16) }} Draft template — this policy must be reviewed by the clinic and a qualified legal adviser for compliance with applicable Indian law, including the Digital Personal Data Protection Act, 2023, before launch.</p>
+      {% endif %}
+      <p class="legal__updated">Last updated: to be confirmed at launch</p>
+
+      <h2>1. Who we are</h2>
+      <p>This website is operated by {{ clinic.name }}, {{ clinic.locality }}, {{ clinic.area }}, {{ clinic.city }}, {{ clinic.state }}, India. You can contact us on {{ clinic.phone_display }}.</p>
+
+      <h2>2. Information we collect</h2>
+      <p>We collect only the information you choose to give us through this website:</p>
+      <ul>
+        <li><strong>Appointment requests:</strong> your name, mobile number, optional email address, preferred date, session and time, and an optional short message.</li>
+        <li><strong>Contact messages:</strong> your name, mobile number and/or email address, and your message.</li>
+      </ul>
+      <p>Please do not send detailed medical history, reports or images through the website. These can be discussed and shared during your consultation.</p>
+      <p>We do not use advertising or tracking cookies. Visitors to the public website are not given cookies. Clinic staff who sign in to the protected admin area receive a security cookie that is needed to keep them signed in.</p>
+      <p>To protect the website from abuse, we keep a short-lived, one-way-encrypted (hashed) form of the network address used to submit a form. Raw IP addresses are not stored with your request.</p>
+
+      <h2>3. How we use your information</h2>
+      <ul>
+        <li>To contact you about your appointment request or reply to your message.</li>
+        <li>To keep a record of requests so the clinic team can manage appointments.</li>
+        <li>To protect the website against spam and misuse.</li>
+      </ul>
+      <p>We do not sell your information or use it for marketing.</p>
+
+      <h2>4. Your consent</h2>
+      <p>When you submit a form, you agree that we may use the details you provide for the purposes above. You may withdraw your consent at any time by contacting the clinic; this does not affect anything done before you withdrew it.</p>
+
+      <h2>5. Who can see your information</h2>
+      <p>Only authorised clinic staff can see submitted requests, using individual password-protected accounts. Our hosting and email providers may process data on our behalf to run the website.</p>
+
+      <h2>6. How long we keep it</h2>
+      <p>Appointment requests and messages are kept only as long as needed to manage them and for record-keeping, and are then deleted. <span class="legal__todo">[Retention period to be confirmed by the clinic.]</span></p>
+
+      <h2>7. Your rights</h2>
+      <p>You may ask to see, correct or delete the information you have submitted, or raise a concern about how it has been handled, by calling {{ clinic.phone_display }}. <span class="legal__todo">[Grievance contact details to be confirmed.]</span></p>
+
+      <h2>8. Security</h2>
+      <p>The website uses encrypted connections (HTTPS), restricted staff access, hashed passwords, and other safeguards. No online service can be guaranteed to be completely secure.</p>
+
+      <h2>9. Changes to this policy</h2>
+      <p>We may update this policy from time to time. The latest version will always be available on this page.</p>
+    </article>
+  </div>
+</section>
+{% endblock %}

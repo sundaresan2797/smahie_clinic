@@ -1,0 +1,16 @@
+{% import "components/macros.html" as ui with context %}
+<section class="contact-home" id="contact" aria-labelledby="contact-title">
+  <div class="container-xl">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow" data-anim="fade">Contact &amp; location</p>
+        <h2 class="section-title" id="contact-title" data-anim="lines">Visit or Call <em>Us</em></h2>
+      </div>
+      <div class="section-head__aside" data-anim="up">
+        <p>Call during consultation hours to ask a question or arrange a visit, or send an appointment request online.</p>
+        <a class="text-link" href="/contact">Contact page {{ ui.icon('arrow-right', size=16) }}</a>
+      </div>
+    </div>
+    {% include "components/contact_cards.html" %}
+  </div>
+</section>

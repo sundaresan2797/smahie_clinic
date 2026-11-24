@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as ui with context %}
+{% block content %}
+{% set title %}Orthopaedic <em>Services</em>{% endset %}
+{{ ui.page_hero("What we can help with", title, "Find the area that best matches what you are experiencing. If you are not sure, a general orthopaedic consultation is a good place to start.", meta.breadcrumbs) }}
+
+<section class="section section--ivory section--tight-top" aria-label="Service list">
+  <div class="container-xl">
+    {% if show_review %}
+    <p class="review-banner" data-anim="fade">{{ ui.icon('info', size=16) }} These service categories and descriptions are proposed and awaiting clinic approval before publication.</p>
+    {% endif %}
+    <div class="service-grid" data-anim="stagger">
+      {% for s in services %}{{ ui.service_card(s, featured=s.featured) }}{% endfor %}
+      {{ ui.service_cta() }}
+    </div>
+  </div>
+</section>
+{% endblock %}

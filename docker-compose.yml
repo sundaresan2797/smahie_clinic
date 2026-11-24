@@ -1,0 +1,60 @@
+# Production-style stack: PostgreSQL + migrations + app + Nginx.
+#   cp .env.example .env   # set SECRET_KEY, SITE_URL, POSTGRES_PASSWORD, ENVIRONMENT=production
+#   docker compose up -d --build
+#   docker compose exec web python -m scripts.create_admin you@example.com
+# See docs/DEPLOYMENT.md for HTTPS.
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: smahie
+      POSTGRES_USER: smahie
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smahie -d smahie"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  migrate:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://smahie:${POSTGRES_PASSWORD}@db:5432/smahie
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  web:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://smahie:${POSTGRES_PASSWORD}@db:5432/smahie
+      # Only Nginx on the internal network can reach this container.
+      FORWARDED_ALLOW_IPS: "*"
+    expose:
+      - "8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/nginx/docker.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./app/static:/srv/static:ro
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  pgdata:

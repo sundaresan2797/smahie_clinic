@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}
+{% block title %}Messages{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <h1 class="admin-title">Website messages</h1>
+    <p class="admin-sub">General questions sent through the contact form.</p>
+  </div>
+  <nav class="admin-toggle" aria-label="Filter messages">
+    <a href="/admin/messages?show=open"{% if show == 'open' %} aria-current="true"{% endif %}>Open</a>
+    <a href="/admin/messages?show=all"{% if show != 'open' %} aria-current="true"{% endif %}>All</a>
+  </nav>
+</div>
+{% if rows %}
+<ul class="admin-messages">
+  {% for m in rows %}
+  <li class="admin-card{% if m.is_handled %} is-handled{% endif %}">
+    <div class="admin-messages__head">
+      <h2 class="admin-card__title">{{ m.name }}</h2>
+      <small>{{ m.created_at | ist_datetime }}</small>
+    </div>
+    <p class="admin-messages__contact">
+      {% if m.phone %}<a href="tel:{{ m.phone }}">{{ m.phone | phone }}</a>{% endif %}
+      {% if m.email %}<a href="mailto:{{ m.email }}">{{ m.email }}</a>{% endif %}
+    </p>
+    <p class="admin-message">{{ m.message }}</p>
+    <form method="post" action="/admin/messages/{{ m.id }}/handled">
+      <input type="hidden" name="csrf_token" value="{{ csrf }}">
+      <button class="admin-btn admin-btn--ghost" type="submit">{{ 'Reopen' if m.is_handled else 'Mark as handled' }}</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="admin-empty"><p>No {{ 'open ' if show == 'open' else '' }}messages.</p></div>
+{% endif %}
+{% endblock %}

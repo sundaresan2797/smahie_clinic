@@ -1,0 +1,102 @@
+{% import "components/macros.html" as ui with context %}
+<header class="site-header" data-header>
+  <div class="container-xl">
+    <div class="site-header__bar">
+      <a class="brand" href="/" data-intro="brand"{% if current_path == '/' %} aria-current="page"{% endif %}>
+        {{ ui.emblem(44, "brand__mark") }}
+        <span class="brand__text">
+          <span class="brand__name">SMAHIE</span>
+          <span class="brand__sub">Ortho Care</span>
+        </span>
+        <span class="visually-hidden"> — home</span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Main">
+        <ul class="primary-nav__list" data-nav-list>
+          {% for label, href in nav_items %}
+            {% if href == '/services' %}
+            <li class="dropdown" data-intro="nav">
+              <button class="primary-nav__link dropdown-toggle{% if is_active(href) %} is-active{% endif %}" type="button"
+                      data-bs-toggle="dropdown" data-bs-offset="0,22" aria-expanded="false" data-nav-link>
+                Services {{ ui.icon('chevron-down', 'primary-nav__chev', 16) }}
+              </button>
+              <div class="dropdown-menu services-menu">
+                <div class="services-menu__grid">
+                  {% for s in all_services %}
+                  <a class="services-menu__item dropdown-item" href="{{ s.path }}"{% if current_path == s.path %} aria-current="page"{% endif %}>
+                    <span class="services-menu__icon">{{ ui.icon('s-' ~ s.icon, size=30) }}</span>
+                    <span><strong>{{ s.title }}</strong><small>{{ s.short }}</small></span>
+                  </a>
+                  {% endfor %}
+                </div>
+                <a class="services-menu__all dropdown-item" href="/services">All orthopaedic services {{ ui.icon('arrow-right', size=16) }}</a>
+              </div>
+            </li>
+            {% else %}
+            <li data-intro="nav">
+              <a class="primary-nav__link{% if is_active(href) %} is-active{% endif %}" href="{{ href }}" data-nav-link{% if current_path == href %} aria-current="page"{% endif %}>{{ label }}</a>
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <span class="primary-nav__indicator" data-nav-indicator aria-hidden="true"></span>
+      </nav>
+
+      <div class="site-header__actions">
+        <a class="header-call" href="{{ clinic.tel_href }}" data-intro="nav">
+          <span class="header-call__icon">{{ ui.icon('phone', size=18) }}</span>
+          <span class="header-call__text"><small>Appointments</small>{{ clinic.phone_display }}</span>
+        </a>
+        <a class="btn-soc btn-soc--primary btn-soc--sm header-book" href="/appointment" data-magnetic data-intro="nav">Book Appointment</a>
+        <button class="menu-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNav"
+                aria-controls="mobileNav" aria-label="Open menu" data-intro="nav">
+          <span class="menu-toggle__lines" aria-hidden="true"><span></span><span></span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="offcanvas offcanvas-end mobile-nav" tabindex="-1" id="mobileNav" aria-labelledby="mobileNavLabel" data-lenis-prevent>
+  <div class="offcanvas-header mobile-nav__header">
+    <a class="brand brand--light" href="/">
+      {{ ui.emblem(40, "brand__mark brand__mark--badge") }}
+      <span class="brand__text"><span class="brand__name">SMAHIE</span><span class="brand__sub">Ortho Care</span></span>
+    </a>
+    <h2 class="visually-hidden" id="mobileNavLabel">Menu</h2>
+    <button type="button" class="mobile-nav__close" data-bs-dismiss="offcanvas" aria-label="Close menu">{{ ui.icon('close', size=22) }}</button>
+  </div>
+  <div class="offcanvas-body mobile-nav__body">
+    <nav aria-label="Mobile">
+      <ul class="mobile-nav__list">
+        <li class="mobile-nav__item"><a href="/"{% if current_path == '/' %} aria-current="page"{% endif %}><span class="mobile-nav__num">01</span>Home</a></li>
+        {% for label, href in nav_items %}
+          {% if href == '/services' %}
+          <li class="mobile-nav__item">
+            <button class="mobile-nav__toggle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobileServices" aria-expanded="false" aria-controls="mobileServices">
+              <span class="mobile-nav__num">{{ '%02d' % (loop.index + 1) }}</span>Services {{ ui.icon('chevron-down', 'mobile-nav__chev', 22) }}
+            </button>
+            <div class="collapse" id="mobileServices">
+              <ul class="mobile-nav__sub">
+                <li><a href="/services">All services</a></li>
+                {% for s in all_services %}<li><a href="{{ s.path }}">{{ s.title }}</a></li>{% endfor %}
+              </ul>
+            </div>
+          </li>
+          {% else %}
+          <li class="mobile-nav__item"><a href="{{ href }}"{% if current_path == href %} aria-current="page"{% endif %}><span class="mobile-nav__num">{{ '%02d' % (loop.index + 1) }}</span>{{ label }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+    <div class="mobile-nav__footer mobile-nav__item">
+      <div class="mobile-nav__actions">
+        <a class="btn-soc btn-soc--gold" href="/appointment">{{ ui.icon('calendar', size=18) }} Book Appointment</a>
+        <a class="btn-soc btn-soc--light" href="{{ clinic.tel_href }}">{{ ui.icon('phone', size=18) }} Call {{ clinic.phone_display }}</a>
+      </div>
+      <dl class="mobile-nav__hours">
+        {% for s in clinic.sessions %}<div><dt>{{ s.label }}</dt><dd>{{ s.display }}</dd></div>{% endfor %}
+      </dl>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as ui with context %}
+{% block content %}
+<section class="error-page" aria-labelledby="page-title">
+  <div class="error-page__deco" aria-hidden="true">
+    <svg viewBox="0 0 400 400"><path class="draw-path" d="M40 320 C 120 320, 140 220, 200 210 S 270 150, 300 150" /><circle cx="318" cy="150" r="8"/></svg>
+  </div>
+  <div class="container-xl error-page__inner">
+    <p class="error-page__code" aria-hidden="true">404</p>
+    <p class="eyebrow">Page not found</p>
+    <h1 class="error-page__title" id="page-title">This path doesn't <em>lead anywhere.</em></h1>
+    <p class="error-page__text">The page you are looking for has moved or does not exist. These links may help you find your way.</p>
+    <div class="btn-row btn-row--center">
+      <a class="btn-soc btn-soc--primary" href="/">Back to home <span class="btn-soc__icon">{{ ui.icon('arrow-right', size=16) }}</span></a>
+      <a class="btn-soc btn-soc--ghost" href="/services">Our services</a>
+      <a class="btn-soc btn-soc--ghost" href="/appointment">Request appointment</a>
+    </div>
+    <p class="error-page__call">Or call <a href="{{ clinic.tel_href }}">{{ clinic.phone_display }}</a></p>
+  </div>
+</section>
+{% endblock %}

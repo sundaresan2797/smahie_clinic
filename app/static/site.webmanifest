@@ -1,0 +1,13 @@
+{
+  "name": "SMAHIE ORTHO CARE",
+  "short_name": "SMAHIE Ortho",
+  "description": "Orthopaedic clinic in Thirumalai Nagar, Perungudi, Chennai.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#F8F6F1",
+  "theme_color": "#102F4A",
+  "icons": [
+    { "src": "/static/images/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/static/images/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

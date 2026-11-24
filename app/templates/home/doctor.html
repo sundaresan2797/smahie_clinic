@@ -1,0 +1,33 @@
+{% import "components/macros.html" as ui with context %}
+<section class="doctor-feature" aria-labelledby="doctor-title">
+  <div class="doctor-feature__geo" aria-hidden="true" data-parallax="0.25">
+    <svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="120"/><circle cx="200" cy="200" r="170"/><circle cx="200" cy="200" r="198" stroke-dasharray="2 10"/></svg>
+  </div>
+  <div class="container-xl doctor-feature__grid">
+    <div class="doctor-feature__media">
+      <div class="doctor-feature__frame" data-anim="mask">
+        {{ ui.portrait("doctor-feature__img", sizes="(min-width: 992px) 460px, 88vw") }}
+      </div>
+      <p class="doctor-feature__tag">{{ ui.icon('pin', size=14) }} {{ clinic.name }} · {{ clinic.area }}</p>
+    </div>
+    <div class="doctor-feature__body">
+      <p class="eyebrow" data-anim="fade">Meet the doctor</p>
+      <h2 class="section-title" id="doctor-title" data-anim="lines">Meet Your Orthopaedic <em>Specialist</em></h2>
+      <span class="gold-rule" data-anim="rule" aria-hidden="true"></span>
+      <div data-anim="up">
+        <p class="doctor-name">{{ doctor.name }}</p>
+        <p class="doctor-quals">{{ doctor.qualifications }} <span aria-hidden="true">·</span> {{ doctor.title }}</p>
+      </div>
+      <p class="section-lead" data-anim="up">{{ doctor.name }} is a {{ doctor.title }} who sees patients at {{ clinic.name }} in {{ clinic.area }}, {{ clinic.city }}, for concerns involving bones, joints, the spine and movement.</p>
+      <dl class="fact-list" data-anim="stagger">
+        <div class="fact-list__item" data-anim-child><dt>Qualifications</dt><dd>{{ doctor.qualifications }}</dd></div>
+        <div class="fact-list__item" data-anim-child><dt>Speciality</dt><dd>{{ doctor.title }}</dd></div>
+        <div class="fact-list__item" data-anim-child><dt>Consultations</dt><dd>{% for s in clinic.sessions %}<span>{{ s.display }}</span>{% endfor %}</dd></div>
+      </dl>
+      <div class="btn-row" data-anim="up">
+        <a class="btn-soc btn-soc--primary" href="/doctor" data-magnetic>View Profile <span class="btn-soc__icon">{{ ui.icon('arrow-right', size=16) }}</span></a>
+        <a class="btn-soc btn-soc--ghost" href="/appointment">Book Appointment</a>
+      </div>
+    </div>
+  </div>
+</section>

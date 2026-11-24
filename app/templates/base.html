@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en-IN" class="no-js page-{{ page }}" data-page="{{ page }}"{% if page == 'home' %} data-has-loader="on"{% endif %}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{{ meta.title }}</title>
+  <meta name="description" content="{{ meta.description }}">
+  <meta name="robots" content="{{ meta.robots }}">
+  <link rel="canonical" href="{{ meta.canonical }}">
+  <meta name="theme-color" content="#102F4A">
+  <meta name="format-detection" content="telephone=no">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ clinic.name }}">
+  <meta property="og:locale" content="en_IN">
+  <meta property="og:title" content="{{ meta.title }}">
+  <meta property="og:description" content="{{ meta.description }}">
+  <meta property="og:url" content="{{ meta.canonical }}">
+  <meta property="og:image" content="{{ meta.image }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ meta.image_alt }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ meta.title }}">
+  <meta name="twitter:description" content="{{ meta.description }}">
+  <meta name="twitter:image" content="{{ meta.image }}">
+  <meta name="twitter:image:alt" content="{{ meta.image_alt }}">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ static_url('images/icons/favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ static_url('images/icons/apple-touch-icon.png') }}">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <link rel="preload" href="/static/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  {% block preload %}{% endblock %}
+
+  <link rel="stylesheet" href="{{ static_url('vendor/bootstrap/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ static_url('css/variables.css') }}">
+  <link rel="stylesheet" href="{{ static_url('css/base.css') }}">
+  <link rel="stylesheet" href="{{ static_url('css/layout.css') }}">
+  <link rel="stylesheet" href="{{ static_url('css/components.css') }}">
+  <link rel="stylesheet" href="{{ static_url('css/sections.css') }}">
+  <link rel="stylesheet" href="{{ static_url('css/animations.css') }}">
+
+  {# Decide motion/loader states before first paint. Content is never hidden
+     if scripts fail: a failsafe removes the hiding classes after 4s. #}
+  <script nonce="{{ csp_nonce }}">
+    (function (d) {
+      var h = d.documentElement, rm = true;
+      h.classList.remove('no-js'); h.classList.add('js');
+      try { rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+      if (rm) return;
+      h.classList.add('motion-ok');
+      if (h.getAttribute('data-has-loader') === 'on') {
+        try { if (!sessionStorage.getItem('soc-intro')) h.classList.add('show-loader'); } catch (e) {}
+      }
+      window.setTimeout(function () {
+        if (!h.classList.contains('motion-ready')) h.classList.remove('motion-ok', 'show-loader');
+      }, 4000);
+    })(document);
+  </script>
+  <script type="importmap" nonce="{{ csp_nonce }}">{{ import_map() | safe }}</script>
+  {% for block in meta.jsonld %}
+  <script type="application/ld+json" nonce="{{ csp_nonce }}">{{ block | tojson }}</script>
+  {% endfor %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  {% include "components/icons.html" %}
+  {% if page == 'home' %}{% include "components/loader.html" %}{% endif %}
+  {% include "components/navbar.html" %}
+
+  <main id="main" tabindex="-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "components/footer.html" %}
+  {% include "components/mobile_cta.html" %}
+
+  <button type="button" class="back-to-top" data-back-to-top aria-label="Back to top">
+    <svg class="icon" width="20" height="20" aria-hidden="true" focusable="false"><use href="#i-arrow-up"/></svg>
+  </button>
+  <div class="toast-region" role="status" aria-live="polite" data-toast></div>
+
+  <script src="{{ static_url('vendor/bootstrap/bootstrap.bundle.min.js') }}" defer></script>
+  <script src="{{ static_url('vendor/gsap/gsap.min.js') }}" defer></script>
+  <script src="{{ static_url('vendor/gsap/ScrollTrigger.min.js') }}" defer></script>
+  <script src="{{ static_url('vendor/gsap/SplitText.min.js') }}" defer></script>
+  <script src="{{ static_url('vendor/lenis/lenis.min.js') }}" defer></script>
+  {% if page == 'home' %}<link rel="modulepreload" href="{{ static_url('js/home.js') }}">{% endif %}
+  <script type="module" src="{{ static_url('js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as ui with context %}
+{% block content %}
+{% set title %}Contact <em>Us</em>{% endset %}
+{{ ui.page_hero("Get in touch", title, "Call " ~ clinic.phone_display ~ " during consultation hours, request an appointment online, or send a general question below.", meta.breadcrumbs) }}
+
+<section class="section section--ivory section--tight-top" aria-label="Contact details">
+  <div class="container-xl">
+    {% include "components/contact_cards.html" %}
+  </div>
+</section>
+
+<section class="section section--white" aria-labelledby="message-title">
+  <div class="container-xl split split--form">
+    <div class="split__main">
+      <p class="eyebrow" data-anim="fade">Send a message</p>
+      <h2 class="section-title" id="message-title" data-anim="lines">Have a <em>Question?</em></h2>
+      <span class="gold-rule" data-anim="rule" aria-hidden="true"></span>
+      <p class="section-lead" data-anim="up">Use this form for general questions. To request a consultation, please use the <a href="/appointment">appointment form</a> or call the clinic.</p>
+      <div class="safety-note safety-note--compact" data-anim="up">
+        {{ ui.icon('alert', size=20) }}
+        <p>Messages are not monitored for emergencies. In an emergency call <a href="tel:112">112</a> or <a href="tel:108">108</a>.</p>
+      </div>
+      {{ ui.review_note(clinic.pending_items, "Contact details awaiting confirmation") }}
+    </div>
+    <div class="split__aside split__aside--form">
+      {% include "components/contact_form.html" %}
+    </div>
+  </div>
+</section>
+{% endblock %}

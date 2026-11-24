@@ -1,0 +1,67 @@
+{% import "components/macros.html" as ui with context %}
+{% set steps = [
+  ("Every Step Matters.", "From your first steps of the day to the last, movement carries you through life — at home, at work and with the people you love."),
+  ("When movement becomes difficult…", "Pain, stiffness or an injury can make simple things — walking, climbing stairs, lifting a bag — feel harder than they should."),
+  ("Understanding the cause is the first step.", "A careful orthopaedic evaluation helps make sense of what your body is telling you, so decisions about care feel clear."),
+  ("Find guidance for your orthopaedic concerns.", "Talk to " ~ clinic.name ~ " about what you are experiencing, and understand the options that may help you move better."),
+] %}
+<section class="story" aria-labelledby="story-title" data-story>
+  <div class="story__stage container-xl">
+    <div class="story__col">
+      <h2 class="eyebrow eyebrow--light story__eyebrow" id="story-title">Your care journey</h2>
+      <div class="story__items">
+        {% for title, text in steps %}
+        <article class="story__item" data-story-item>
+          <span class="story__num">0{{ loop.index }}</span>
+          <h3 class="story__title">{{ title }}</h3>
+          <p class="story__text">{{ text }}</p>
+          {% if loop.last %}
+          <div class="btn-row">
+            <a class="btn-soc btn-soc--gold" href="/appointment">Request an Appointment <span class="btn-soc__icon">{{ ui.icon('arrow-right', size=16) }}</span></a>
+          </div>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+      <ol class="story__progress" aria-hidden="true">
+        {% for _ in steps %}<li data-story-bar{% if loop.first %} class="is-active"{% endif %}></li>{% endfor %}
+      </ol>
+    </div>
+
+    <div class="story__visual" aria-hidden="true">
+      <svg class="story__ring-svg" viewBox="0 0 400 400">
+        <circle class="story__ring-track" cx="200" cy="200" r="186"/>
+        <circle class="story__ring" cx="200" cy="200" r="186" transform="rotate(-90 200 200)" data-story-ring/>
+      </svg>
+      <svg class="story__art" viewBox="0 0 400 400" data-story-art>
+        <path class="story__path-dotted" d="M72 318 C 132 318, 150 236, 204 222 S 292 132, 334 96"/>
+        <g class="story__feet">
+          <ellipse cx="100" cy="306" rx="8" ry="14" transform="rotate(-72 100 306)"/>
+          <ellipse cx="142" cy="276" rx="8" ry="14" transform="rotate(-58 142 276)"/>
+          <ellipse cx="190" cy="236" rx="8" ry="14" transform="rotate(-48 190 236)"/>
+          <ellipse cx="238" cy="198" rx="8" ry="14" transform="rotate(-42 238 198)"/>
+          <ellipse cx="282" cy="150" rx="8" ry="14" transform="rotate(-38 282 150)"/>
+        </g>
+        <circle class="story__gold-dot" cx="334" cy="96" r="7"/>
+      </svg>
+      <svg class="story__art" viewBox="0 0 400 400" data-story-art>
+        <use href="#s-knee" x="110" y="95" width="180" height="180" class="story__use"/>
+        <g class="story__pulses"><circle cx="204" cy="185" r="34"/><circle cx="204" cy="185" r="58"/><circle cx="204" cy="185" r="82"/></g>
+      </svg>
+      <svg class="story__art" viewBox="0 0 400 400" data-story-art>
+        <circle class="story__lens" cx="186" cy="186" r="86"/>
+        <path class="story__lens-handle" d="M248 248 L306 306"/>
+        <use href="#s-joint" x="136" y="136" width="100" height="100" class="story__use story__use--sm"/>
+        <path class="story__ticks" d="M186 84v18M186 270v18M84 186h18M270 186h18"/>
+      </svg>
+      <svg class="story__art" viewBox="0 0 400 400" data-story-art>
+        <path class="story__route" d="M66 312 C 140 312, 160 214, 224 202 S 300 136, 318 108"/>
+        <path class="story__route-head" d="M300 104 L318 108 L314 126"/>
+        <circle class="story__dest-ring" cx="322" cy="100" r="26"/>
+        <circle class="story__gold-dot" cx="322" cy="100" r="9"/>
+        <circle class="story__start" cx="66" cy="312" r="6"/>
+      </svg>
+      <p class="story__counter"><span data-story-current>01</span> / 0{{ steps | length }}</p>
+    </div>
+  </div>
+</section>

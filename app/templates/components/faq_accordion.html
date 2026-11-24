@@ -1,0 +1,20 @@
+{# Expects `faqs` and `faq_id`. Answers stay readable without JavaScript (see base.css). #}
+{% import "components/macros.html" as ui with context %}
+<div class="accordion faq-accordion" id="{{ faq_id }}">
+  {% for f in faqs %}
+  <div class="accordion-item" data-anim-child>
+    <h3 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ faq_id }}-{{ loop.index }}"
+              aria-expanded="false" aria-controls="{{ faq_id }}-{{ loop.index }}">
+        <span class="faq-accordion__num">0{{ loop.index }}</span>{{ f.question }}
+      </button>
+    </h3>
+    <div id="{{ faq_id }}-{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#{{ faq_id }}">
+      <div class="accordion-body">
+        {% for p in f.answer %}<p>{{ p }}</p>{% endfor %}
+        {% if not f.verified %}{{ ui.review("Awaiting clinic confirmation") }}{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>

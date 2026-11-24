@@ -1,0 +1,53 @@
+{% import "components/macros.html" as ui with context %}
+<section class="hero" aria-labelledby="hero-title" data-hero-root>
+  <div class="hero__bg" aria-hidden="true">
+    <svg class="hero__arcs" viewBox="0 0 800 800" data-hero="deco">
+      <circle cx="400" cy="400" r="230"/><circle cx="400" cy="400" r="310"/><circle cx="400" cy="400" r="390"/>
+    </svg>
+    <span class="hero__orb hero__orb--gold" data-depth="0.5"><span></span></span>
+    <span class="hero__orb hero__orb--blue" data-depth="0.25"><span></span></span>
+  </div>
+
+  <div class="container-xl hero__inner">
+    <div class="hero__copy">
+      <p class="eyebrow hero__eyebrow" data-hero="eyebrow"><span class="eyebrow__pulse" aria-hidden="true"></span>Orthopaedic Clinic · {{ clinic.area }}, {{ clinic.city }}</p>
+      <h1 class="hero__title" id="hero-title" data-hero="title">Move Better.<br> Live <em>Stronger.</em></h1>
+      <p class="hero__lead" data-hero="fade">Personalised Orthopaedic Care for Your Bones, Joints, Spine and Movement.</p>
+      <div class="hero__actions" data-hero="fade">
+        <a class="btn-soc btn-soc--primary btn-soc--lg" href="/appointment" data-magnetic>Book an Appointment <span class="btn-soc__icon">{{ ui.icon('arrow-right', size=16) }}</span></a>
+        <a class="btn-soc btn-soc--ghost btn-soc--lg" href="#services" data-scroll-to>Explore Our Services</a>
+      </div>
+      <dl class="hero__meta" data-hero="fade">
+        <div class="hero__meta-item">
+          <dt>{{ ui.icon('pin', size=16) }} Location</dt>
+          <dd>{{ clinic.locality }}, {{ clinic.area }}, {{ clinic.city }}</dd>
+        </div>
+        <div class="hero__meta-item">
+          <dt>{{ ui.icon('clock', size=16) }} Consultation hours</dt>
+          <dd>{% for s in clinic.sessions %}<span>{{ s.display }}</span>{% endfor %}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="hero__visual">
+      <span class="hero__backdrop" aria-hidden="true" data-hero="deco"></span>
+      <span class="hero__outline" aria-hidden="true" data-hero="deco" data-depth="0.35"></span>
+      <div class="hero__frame">
+        {{ ui.portrait("hero__img", sizes="(min-width: 992px) 500px, 86vw", loading="eager", priority=true) }}
+        <span class="hero__curtain" aria-hidden="true"></span>
+      </div>
+      <div class="hero__badge" data-hero="badge">
+        <span class="hero__badge-mark" aria-hidden="true">{{ ui.icon('s-stethoscope', size=26) }}</span>
+        <span>
+          <strong>{{ doctor.name }}</strong>
+          <span>{{ doctor.title }}</span>
+        </span>
+      </div>
+      <p class="hero__pillars" data-hero="badge">{% for p in clinic.pillars %}<span>{{ p }}</span>{% endfor %}</p>
+    </div>
+  </div>
+
+  <a class="hero__scroll" href="#intro" data-scroll-to aria-label="Scroll to the introduction">
+    <span class="hero__scroll-line" aria-hidden="true"></span><span class="hero__scroll-text">Scroll</span>
+  </a>
+</section>
